@@ -73,7 +73,34 @@
             android:text="Division"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
+
+        <RadioButton
+            android:id="@+id/optExponente"
+            android:text="Exponente"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <RadioButton
+            android:id="@+id/optPorcentaje"
+            android:text="Porcentaje"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <RadioButton
+            android:id="@+id/optRaiz"
+            android:text="Raiz"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <RadioButton
+            android:id="@+id/optFactorial"
+            android:text="Factorial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <RadioButton
+            android:id="@+id/optCubica"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cubica" />
     </RadioGroup>
+
 
 
 

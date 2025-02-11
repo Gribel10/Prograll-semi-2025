@@ -1,135 +1,117 @@
 package com.ugb.miprimeraaplicacion;
 
-import static com.ugb.miprimeraaplicacion.R.id.txtNum1;
-
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
-
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
+    TabHost tbh;
     Button btn;
     TextView tempVal;
-    RadioGroup rgb;
-    RadioButton opt;
-    EditText num1, num2;
+    EditText textCantidad;
+    TextView lblRespuesta;
+    Spinner spnDe, spnA;
+    conversores objConversores = new conversores();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        tbh = findViewById(R.id.tbhConversor);
+        tbh.setup();
+        tbh.addTab(tbh.newTabSpec("Moneda").setContent(R.id.tabMoneda).setIndicator("MONEDAS", null));
+        tbh.addTab(tbh.newTabSpec("Longitud").setContent(R.id.tabLongitud).setIndicator("LONGITUD", null));
+        tbh.addTab(tbh.newTabSpec("Tiempo").setContent(R.id.tabTiempo).setIndicator("TIEMPO", null));
+        tbh.addTab(tbh.newTabSpec("Almacenamiento").setContent(R.id.tabAlmacenamiento).setIndicator("ALMACENAMIENTO", null));
+        tbh.addTab(tbh.newTabSpec("Tranferencia").setContent(R.id.tabTransferencia).setIndicator("TRANFERENCIA", null));
         btn = findViewById(R.id.btnCalcular);
-        num1 = findViewById(R.id.txtNum1);
-        num2 = findViewById(R.id.txtNum2);
-        rgb = findViewById(R.id.rgoOpciones);
-
-        rgb.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId == R.id.optRaiz || checkedId == R.id.optFactorial || checkedId == R.id.optCubica) {
-                    num2.setText("");
-                    num2.setEnabled(false);
-                } else {
-                    num2.setEnabled(true);
-                }
-            }
-        });
+        textCantidad = findViewById(R.id.textCantidad);
+        lblRespuesta = findViewById(R.id.lblRespuesta);
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                tempVal = findViewById(R.id.txtNum1);
-                double num1 = Double.parseDouble(tempVal.getText().toString());
-                tempVal = findViewById(R.id.txtNum2);
-                double num2 = tempVal.isEnabled() ? Double.parseDouble(tempVal.getText().toString()) : 0;
-                double respuesta = 0.0;
+            public void onClick(View view) {
+                try {
+                    int opcion = tbh.getCurrentTab();
 
-                opt = findViewById(R.id.optSuma);
-                if (opt.isChecked()) {
-                    respuesta = num1 + num2;
-                }
-                opt = findViewById(R.id.optResta);
-                if (opt.isChecked()) {
-                    respuesta = num1 - num2;
-                }
-                opt = findViewById(R.id.optMultiplicacion);
-                if (opt.isChecked()) {
-                    respuesta = num1 * num2;
-                }
-                opt = findViewById(R.id.optDivision);
-                if (opt.isChecked()) {
-                    if (num2 == 0) {
-                        tempVal = findViewById(R.id.lblRespuesta);
-                        tempVal.setText("Error: No se puede dividir por 0");
-                        return;
-                    } else {
-                        respuesta = num1 / num2;
+                    if (opcion == 0) {
+                        spnDe = findViewById(R.id.spnDeMonedas);
+                        spnA = findViewById(R.id.spnAMonedas);
+                    } else if (opcion == 1) {
+                        spnDe = findViewById(R.id.spnDeLongitud);
+                        spnA = findViewById(R.id.spnALongitud);
+                    } else if (opcion == 2) {
+                        spnDe = findViewById(R.id.spnDeTiempo);
+                        spnA = findViewById(R.id.spnATiempo);
+                    } else if (opcion == 3) {
+                        spnDe = findViewById(R.id.spnDeAlmacenamiento);
+                        spnA = findViewById(R.id.spnAAlmacenamiento);
+                    } else if (opcion == 4) {
+                        spnDe = findViewById(R.id.spnDeTransferencia);
+                        spnA = findViewById(R.id.spnATransferencia);
                     }
-                }
-                opt = findViewById(R.id.optExponente);
-                if (opt.isChecked()) {
-                    respuesta = Math.pow(num1, num2);
-                }
-                opt = findViewById(R.id.optPorcentaje);
-                if (opt.isChecked()) {
-                    if (num2 == 0) {
-                        respuesta = num1 / 100;
-                    } else {
-                        respuesta = (num1 * num2) / 100;
-                    }
-                }
-                opt = findViewById(R.id.optRaiz);
-                if (opt.isChecked()) {
-                    if (num1 < 0) {
-                        tempVal = findViewById(R.id.lblRespuesta);
-                        tempVal.setText("Error: No se puede calcular la raíz de un número negativo");
+
+
+                    int de = spnDe.getSelectedItemPosition();
+                    int a = spnA.getSelectedItemPosition();
+
+                    String cantidadTexto = textCantidad.getText().toString().trim();
+                    if (cantidadTexto.isEmpty()) {
+                        Toast.makeText(MainActivity.this, "⚠ Ingrese una cantidad", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    respuesta = Math.sqrt(num1);
-                }
-                opt = findViewById(R.id.optFactorial);
-                if (opt.isChecked()) {
-                    if (num1 < 0) {
-                        tempVal = findViewById(R.id.lblRespuesta);
-                        tempVal.setText("Error: No se puede calcular el factorial de un número negativo");
+
+                    double cantidad = Double.parseDouble(cantidadTexto);
+
+                    if (cantidad < 0) {
+                        Toast.makeText(MainActivity.this, "⚠ Ingrese un número positivo", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    respuesta = 1;
-                    for (int i = 1; i <= num1; i++) {
-                        respuesta *= i;
+
+                    if (de == a) {
+                        Toast.makeText(MainActivity.this, "⚠ Seleccione diferentes unidades", Toast.LENGTH_SHORT).show();
+                        return;
                     }
-                }
 
-                opt = findViewById(R.id.optCubica);
-                if (opt.isChecked()){
-                    respuesta = Math.cbrt(num1);
-                }
+                    double respuesta = objConversores.convertir(opcion, de, a, cantidad);
 
-                tempVal = findViewById(R.id.lblRespuesta);
-                tempVal.setText("Respuesta: " + respuesta);
+                    Toast.makeText(MainActivity.this, "✅ Conversión: " + respuesta, Toast.LENGTH_LONG).show();
+                    lblRespuesta.setText("Respuesta: " + respuesta);
+
+                } catch (NumberFormatException e) {
+                    Toast.makeText(MainActivity.this, "❌ Error: Solo se permiten números", Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    Toast.makeText(MainActivity.this, "❌ Error inesperado: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
             }
-   });
+        });
+    }
+    class conversores {
+        double[][] valores = {
+                {1, 0.98, 7.73, 25.45, 36.78, 508.87, 8.74},
+                {1, 0.001, 100, 1000, 39.37, 3.2808, 1.0936, 0.00062137},
+                {1, 1.0/60, 1.0/3600, 1.0/86400, 1.0/604800, 1.0/2628000, 1.0/31536000},
+                {1, 0.000976563, 9.53674e-7, 9.31323e-10, 9.09495e-13, 8.88178e-16},
+                {1, 0.001, 0.000001, 0.000000001, 0.000000000001}
+
+        };
+
+        public double convertir(int opcion, int de, int a, double cantidad){
+            return valores[opcion][a] / valores[opcion][de] * cantidad;
+ }
 }
 }
+

@@ -2,27 +2,17 @@ package com.ugb.miprimeraaplicacion;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.Spinner;
-import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-
-
-
-
 public class MainActivity extends AppCompatActivity {
-Button btn;
-TextView tempVal;
-DB db;
-@Override
+    Button btn;
+    TextView tempVal;
+    DB db;
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -36,7 +26,7 @@ DB db;
             }
         });
     }
-    private void guardarAmigo(){
+    private void guardarAmigo() {
         tempVal = findViewById(R.id.txtNombre);
         String nombre = tempVal.getText().toString();
 
@@ -45,20 +35,18 @@ DB db;
 
         tempVal = findViewById(R.id.txtTelefono);
         String telefono = tempVal.getText().toString();
-
         tempVal = findViewById(R.id.txtEmail);
         String email = tempVal.getText().toString();
 
         tempVal = findViewById(R.id.txtDui);
         String dui = tempVal.getText().toString();
 
-        String[] datos = {nombre, direccion, telefono, email, dui, ""};
+        String[] datos = {"", nombre, direccion, telefono, email, dui, ""};
         db.administrar_amigos("agregar", datos);
-        Toast.makeText(this, "Amigo guardado", Toast.LENGTH_SHORT).show();
-}
+        Toast.makeText(getApplicationContext(), "Registro guardado con exito.", Toast.LENGTH_LONG).show();
+    }
 
 }
-
 
 
 

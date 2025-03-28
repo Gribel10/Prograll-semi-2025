@@ -55,5 +55,7 @@ public class AdactadorAmigos extends BaseAdapter {
             Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
         return itemView;
+
+
     }
 }
